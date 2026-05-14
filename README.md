@@ -39,7 +39,7 @@ Aplicación web interactiva que permite visualizar, explorar y gestionar product
 
 ```bash
 # Clonar repositorio
-git clone [URL-del-repositorio]
+git clone https://github.com/geovanygs5/catalogo-de-productos
 
 # Instalar dependencias
 npm install
