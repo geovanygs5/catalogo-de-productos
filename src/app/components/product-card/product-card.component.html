@@ -1,0 +1,32 @@
+<div [routerLink]="['/product', product.id]" class="product-card">
+  <!-- Usar el componente carrusel -->
+  <app-product-carousel 
+    [images]="product.images || []" 
+    [thumbnail]="product.thumbnail"
+  ></app-product-carousel>
+
+  <div class="product-info">
+    <div class="stock-badge" [class]="getStockClass()">
+      {{ getStockText() }}
+    </div>
+    
+    <h3>{{ product.title }}</h3>
+    <p class="category">{{ product.category }}</p>
+    
+    <div class="rating">
+      <span *ngFor="let star of getStarsArray(product.rating)" class="star">★</span>
+      <span class="rating-value">({{ product.rating }})</span>
+    </div>
+    
+    <div class="price-add">
+      <span class="price">\${{ product.price }}</span>
+      <button 
+        (click)="onAddToCart($event)" 
+        [disabled]="product.stock === 0"
+        class="add-btn"
+      >
+        🛒 Agregar
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,52 @@
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold text-gray-800 mb-8">Catálogo de Productos</h1>
+  
+  <!-- Filtros -->
+  <div class="flex flex-col md:flex-row gap-4 mb-8">
+    <input 
+      type="text" 
+      [(ngModel)]="searchTerm"
+      (input)="filterProducts()"
+      placeholder="🔍 Buscar productos..."
+      class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+    >
+    
+    <select 
+      [(ngModel)]="sortBy"
+      (change)="filterProducts()"
+      class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+    >
+      <option value="default">Ordenar por</option>
+      <option value="price-asc">Precio: Menor a Mayor</option>
+      <option value="price-desc">Precio: Mayor a Menor</option>
+      <option value="rating-asc">Rating: Menor a Mayor</option>
+      <option value="rating-desc">Rating: Mayor a Menor</option>
+    </select>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div *ngFor="let _ of [].constructor(8)" class="animate-pulse">
+      <div class="bg-gray-200 h-48 rounded-t-lg"></div>
+      <div class="bg-white p-4">
+        <div class="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+        <div class="h-4 bg-gray-200 rounded w-1/2"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Productos -->
+  <div *ngIf="!loading" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <app-product-card 
+      *ngFor="let product of filteredProducts"
+      [product]="product"
+      (addToCart)="addToCart($event)"
+    >
+    </app-product-card>
+  </div>
+
+  <!-- Sin resultados -->
+  <div *ngIf="!loading && filteredProducts.length === 0" class="text-center py-12">
+    <p class="text-gray-500 text-lg">No se encontraron productos</p>
+  </div>
+</div>

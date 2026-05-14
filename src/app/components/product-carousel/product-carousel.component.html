@@ -1,0 +1,31 @@
+<div class="carousel-container">
+  <img 
+    [src]="getCurrentImage()" 
+    [alt]="'Product image'"
+    class="carousel-image"
+  >
+  
+  <div *ngIf="hasMultipleImages()" class="carousel-controls">
+    <button 
+      (click)="prevImage($event)"
+        class="carousel-btn prev-btn"
+      >
+        ◀
+      </button>
+      <button 
+        (click)="nextImage($event)"
+        class="carousel-btn next-btn"
+      >
+        ▶
+      </button>
+    </div>
+    
+    <div *ngIf="hasMultipleImages()" class="carousel-indicators">
+      <div 
+        *ngFor="let img of images; let i = index"
+        class="indicator"
+        [class.active]="i === currentImageIndex"
+        (click)="$event.stopPropagation(); currentImageIndex = i"
+      ></div>
+    </div>
+  </div>

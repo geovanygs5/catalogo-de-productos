@@ -1,0 +1,62 @@
+<!-- Botón flotante del carrito -->
+<div class="cart-button" (click)="openCart()">
+  <span class="cart-icon">🛒</span>
+  <span class="cart-count" *ngIf="getTotalItems() > 0">{{ getTotalItems() }}</span>
+</div>
+
+<!-- Sidebar del carrito -->
+<div class="cart-overlay" *ngIf="isOpen" (click)="closeCart()"></div>
+<div class="cart-sidebar" [class.open]="isOpen">
+  <div class="cart-header">
+    <h2>Mi Carrito</h2>
+    <button class="close-btn" (click)="closeCart()">✕</button>
+  </div>
+
+  <div class="cart-content">
+    <div *ngIf="cartItems.length === 0" class="empty-cart">
+      <span class="empty-icon">🛒</span>
+      <p>Tu carrito está vacío</p>
+      <button class="continue-shopping" (click)="closeCart()">Continuar comprando</button>
+    </div>
+
+    <div *ngIf="cartItems.length > 0" class="cart-items">
+      <div *ngFor="let item of cartItems" class="cart-item">
+        <img [src]="item.thumbnail" [alt]="item.title" class="item-image">
+        
+        <div class="item-details">
+          <h4>{{ item.title }}</h4>
+          <p class="item-price">${{ item.price }}</p>
+          
+          <div class="item-actions">
+            <div class="quantity-control">
+              <button (click)="updateQuantity(item.id, item.quantity - 1)">-</button>
+              <span>{{ item.quantity }}</span>
+              <button (click)="updateQuantity(item.id, item.quantity + 1)">+</button>
+            </div>
+            <button class="remove-btn" (click)="removeItem(item.id)">Eliminar</button>
+          </div>
+        </div>
+        
+        <div class="item-total">
+          ${{ item.price * item.quantity }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cart-footer" *ngIf="cartItems.length > 0">
+    <div class="total">
+      <span>Total:</span>
+      <strong>${{ getTotalPrice() }}</strong>
+    </div>
+    
+    <div class="cart-actions">
+      <button class="clear-btn" (click)="clearCart()" title="Vaciar carrito">
+        🗑️ Vaciar
+      </button>
+      <button class="checkout-btn" (click)="checkout()" title="Finalizar compra">
+        💳 Pagar ${{ getTotalPrice() }}
+      </button>
+    </div>
+  </div>
+</div>

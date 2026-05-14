@@ -1,0 +1,88 @@
+<div *ngIf="loading" style="text-align: center; padding: 50px;">
+  <p>Cargando producto...</p>
+</div>
+
+<div *ngIf="!loading && product" class="product-detail">
+  <!-- Botón volver -->
+  <button routerLink="/" class="back-btn">← Volver al catálogo</button>
+
+  <div class="detail-container">
+    <!-- Galería de imágenes -->
+    <div class="image-gallery">
+      <img 
+        [src]="(product.images && product.images[currentImageIndex]) || product.thumbnail"
+        [alt]="product.title"
+        class="main-image"
+      >
+      <div *ngIf="product.images && product.images.length > 1" class="thumbnails">
+        <img 
+          *ngFor="let img of product.images; let i = index"
+          [src]="img"
+          (click)="currentImageIndex = i"
+          [class.active]="i === currentImageIndex"
+          class="thumbnail"
+        >
+      </div>
+    </div>
+
+    <!-- Información del producto -->
+    <div class="product-info">
+      <h1>{{ product.title }}</h1>
+      <p class="brand">Marca: {{ product.brand }}</p>
+      <p class="category">{{ product.category }}</p>
+
+      <div class="rating">
+        <div class="stars">
+          <span *ngFor="let star of getStarsArray(product.rating)">★</span>
+        </div>
+        <span>({{ product.rating }})</span>
+      </div>
+
+      <p class="price">\${{ product.price }}</p>
+      
+      <div class="stock" [class.low-stock]="product.stock <= 10">
+        📦 Stock: {{ product.stock }} unidades
+      </div>
+
+      <p class="description">{{ product.description }}</p>
+
+      <!-- Dimensiones -->
+      <div *ngIf="product.dimensions" class="dimensions">
+        <h3>Dimensiones</h3>
+        <p>📏 Ancho: {{ product.dimensions.width }} cm</p>
+        <p>📏 Alto: {{ product.dimensions.height }} cm</p>
+        <p>📏 Profundidad: {{ product.dimensions.depth }} cm</p>
+      </div>
+
+      <!-- Selección de cantidad -->
+      <div class="quantity-selector">
+        <button (click)="decrementQuantity()" [disabled]="quantity <= 1">-</button>
+        <span>{{ quantity }}</span>
+        <button (click)="incrementQuantity()" [disabled]="quantity >= product.stock">+</button>
+      </div>
+
+      <button 
+        (click)="addToCart()" 
+        [disabled]="product.stock === 0"
+        class="add-to-cart-btn"
+      >
+        🛒 Agregar {{ quantity > 1 ? '(' + quantity + ')' : '' }} al carrito
+      </button>
+
+      <!-- Reseñas -->
+      <div *ngIf="product.reviews && product.reviews.length > 0" class="reviews">
+        <h3>Opiniones de usuarios</h3>
+        <div *ngFor="let review of product.reviews" class="review">
+          <div class="review-header">
+            <strong>{{ review.reviewerName }}</strong>
+            <div class="stars small">
+              <span *ngFor="let star of getStarsArray(review.rating)">★</span>
+            </div>
+          </div>
+          <p>{{ review.comment }}</p>
+          <small>{{ review.date | date }}</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
